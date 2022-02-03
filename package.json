@@ -1,6 +1,7 @@
 {
   "name": "myreads-app",
   "version": "0.1.0",
+  "homepage": "https://mostafakamal22.github.io/myReads",
   "private": true,
   "dependencies": {
     "escape-string-regexp": "^5.0.0",

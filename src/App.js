@@ -30,7 +30,7 @@ class BooksApp extends React.Component {
       read:readBooks
     })
   }
-  
+
   //update my books' shelves in the backend
   updateBookShelf = async (bookId,shelf)=> {
     await BooksAPI.update(bookId,shelf);
@@ -40,10 +40,10 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        <Route exact path="/search" >
+        <Route exact path="/myReads/search" >
           <SearchPage data={this.state} update={this.updateBookShelf} />
         </Route>
-        <Route exact path="/" render= {()=> (
+        <Route exact path="/myReads" render= {()=> (
           <div className="list-books">
           <div className="list-books-title">
             <h1>MyReads</h1>
@@ -83,7 +83,7 @@ class BooksApp extends React.Component {
             </div>
           </div>
           <div className="open-search">
-            <Link className="open-search-button" to="/search" >Add a book</Link>
+            <Link className="open-search-button" to="/myReads/search" >Add a book</Link>
           </div>
         </div>
         )}/>

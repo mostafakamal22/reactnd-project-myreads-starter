@@ -18,5 +18,4 @@ you can search for a book and add it to any shelf in the app
  Run the application using the following command from the root directory of the project:
 
 npm install
-npm --save react-router-dom -5.2.0
 npm start

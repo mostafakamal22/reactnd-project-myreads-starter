@@ -1,95 +1,69 @@
-import React from 'react';
-import BooksShelf from './BooksShelf';
-import SearchPage from './searchPage';
-import * as BooksAPI from './BooksAPI'
-import './App.css'
-import { Route } from 'react-router-dom';
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { SearchPage } from "./components/SearchPage";
+import * as BooksAPI from "./BooksAPI";
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Home } from "./components/Home";
 
-class BooksApp extends React.Component {
-  state = {
-    currentlyReading :[],
-    wantToRead:[],
-    read:[],
-  }
-  //invokes getbooks method when the app renders
-  componentDidMount(){
-    this.getbooks();
-  }
-  //get myStored books in the backend server 
-  getbooks = async ()=> {
+export const App = () => {
+  const [booksData, setBooksData] = useState({
+    currentlyReading: [],
+    wantToRead: [],
+    read: [],
+  });
+
+  //invokes getbooks method when the app first mount
+  useEffect(() => {
+    getbooks();
+  }, []);
+
+  //get myStored books from the backend server
+  const getbooks = async () => {
     const data = await BooksAPI.getAll();
     const res = JSON.stringify(data);
     const allBooks = JSON.parse(res);
-    const readBooks = allBooks.filter(book => book.shelf === "read")
-    const wantToReadBooks = allBooks.filter(book => book.shelf === "wantToRead")
-    const currentlyReadingBooks = allBooks.filter(book => book.shelf === "currentlyReading")
-    this.setState({
+    const readBooks = allBooks.filter((book) => book.shelf === "read");
+    const wantToReadBooks = allBooks.filter(
+      (book) => book.shelf === "wantToRead"
+    );
+    const currentlyReadingBooks = allBooks.filter(
+      (book) => book.shelf === "currentlyReading"
+    );
+    setBooksData({
       currentlyReading: currentlyReadingBooks,
-      wantToRead:wantToReadBooks,
-      read:readBooks
-    })
-  }
+      wantToRead: wantToReadBooks,
+      read: readBooks,
+    });
+  };
 
   //update my books' shelves in the backend
-  updateBookShelf = async (bookId,shelf)=> {
-    await BooksAPI.update(bookId,shelf);
-    this.getbooks()
-}
+  const updateBookShelf = async (bookId, shelf) => {
+    await BooksAPI.update(bookId, shelf);
+    getbooks();
+  };
 
-  render() {
-    return (
-      <div className="app">
-        <Route exact path="/myReads/search" >
-          <SearchPage data={this.state} update={this.updateBookShelf} />
-        </Route>
-        <Route exact path="/myReads" render= {()=> (
-          <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <div className="list-books-content">
-            <div>
-              <div className="bookshelf">
-                <h2 className="bookshelf-title">Currently Reading</h2>
-                <div className="bookshelf-books">
-                  <BooksShelf 
-                  books={this.state.currentlyReading}
-                  defaultValue="currentlyReading" 
-                  update={ this.updateBookShelf} 
-                  />
-                </div>
-              </div>
-              <div className="bookshelf">
-                <h2 className="bookshelf-title">Want to Read</h2>
-                <div className="bookshelf-books">
-                  <BooksShelf 
-                  books={this.state.wantToRead}
-                  defaultValue="wantToRead" 
-                  update={ this.updateBookShelf} 
-                  />
-                </div>
-              </div>
-              <div className="bookshelf">
-                <h2 className="bookshelf-title">Read</h2>
-                <div className="bookshelf-books">
-                  <BooksShelf 
-                  books={this.state.read}
-                  defaultValue="read" 
-                  update={ this.updateBookShelf} 
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="open-search">
-            <Link className="open-search-button" to="/myReads/search" >Add a book</Link>
-          </div>
-        </div>
-        )}/>
+  return (
+    <div className="app">
+      <Router>
+        <Routes>
+          <Route
+            path="/myReads/search"
+            element={
+              <SearchPage
+                booksData={booksData}
+                updateBookShelf={updateBookShelf}
+              />
+            }
+          ></Route>
+
+          <Route
+            path="/myReads"
+            element={
+              <Home booksData={booksData} updateBookShelf={updateBookShelf} />
+            }
+          />
+        </Routes>
+      </Router>
     </div>
-    )
-  }
-}
-
-export default BooksApp
+  );
+};

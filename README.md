@@ -4,9 +4,7 @@
 
 <p id="description">
 This app manages you to sort the books you read in three shelves:
-1.currently reading 
-2.want to read
-3.read
+(Currently Reading - Want To Read - Read )
 </p>
 
 <h2>🚀 Demo</h2>
@@ -15,7 +13,7 @@ This app manages you to sort the books you read in three shelves:
 
 <h2>Project Screenshots:</h2>
 
-<img src="https://mostafakamal22.github.io/img/projects/myreads.webp" alt="project-screenshot" width="100%" height="100%">
+<img src="https://mostafakamal22.github.io/img/projects/myreads.webp" alt="project-screenshot" width="375" height="100%">
 
 
 <h2>🧐 Features</h2>
